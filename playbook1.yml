@@ -2,6 +2,10 @@
 - name: Post Ubuntu Install
   hosts: all
   become: true
+
+  vars:
+    reizvihpass: P@ssword
+    troickiypass: P@ssword
   
   tasks:
   
@@ -56,3 +60,14 @@
        user: troickiy
        state: present
        key: "{{ lookup('file', '/Users/v.reizvih/.ssh/troickiy/id_rsa.pub') }}"
+
+  - name: "set password reizvih"
+    ansible.builtin.user:
+      name: reizvih
+      password: "{{ reizvihpass | password_hash('sha512') }}"
+
+  - name: "set password troickiy"
+    ansible.builtin.user:
+      name: troickiy
+      password: "{{ troickiypass | password_hash('sha512') }}"
+    
