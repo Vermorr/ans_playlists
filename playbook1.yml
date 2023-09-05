@@ -72,8 +72,7 @@
       password: "{{ troickiypass | password_hash('sha512') }}"
 
   - name: "install fail2ban"
-    dnf:
-      state: present
+    ansible.builtin.apt:
       name: fail2ban
-     
+      state: latest
     
