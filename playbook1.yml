@@ -70,4 +70,10 @@
     ansible.builtin.user:
       name: troickiy
       password: "{{ troickiypass | password_hash('sha512') }}"
+
+  - name: "install fail2ban"
+    dnf:
+      state: present
+      name: fail2ban
+     
     
