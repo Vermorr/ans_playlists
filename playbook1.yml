@@ -1,28 +1,26 @@
 ---
 - name: Post Ubuntu Install
   hosts: all
-  become: yes
+  become: true
   
   tasks:
   
   - name: "Update Repository cache"
-    apt:
-    update_cache: true
-    cache_valid_time: 3600
-    force_apt_get: true
+    ansible.builtin.apt:
+      update_cache: yes
     
   - name: "Update cache & Full system update"
-    apt:
-    update_cache: true
-    upgrade: dist
-    cache_valid_time: 3600
-    force_apt_get: true
-    
-  - name: "creating users"
+    ansible.builtin.apt:
+      upgrade: dist
+  
+  - name: "creating users"  
+    user: 
+      name: troickiy
+      state: present
+
+  - name: "creating users"  
     user: 
       name: reizvih
-      state: present
-      name: troickiy
       state: present
   
   - name: "create groups"
@@ -32,7 +30,14 @@
     loop:
       - reizvih
       - troickiy
-     
+           
+  - name: "add troickiy to groups"
+    ansible.builtin.user:
+      name: troickiy
+      shell: /bin/bash
+      groups: troickiy,sudo
+      append: yes
+
   - name: "add reizvih to groups"
     ansible.builtin.user:
       name: reizvih
@@ -40,21 +45,14 @@
       groups: reizvih,sudo
       append: yes
       
-  - name: "add troickiy to groups"
-    ansible.builtin.user:
-      name: troickiy
-      shell: /bin/bash
-      groups: troickiy,sudo
-      append: yes
-      
   - name: "put reizvih key to server"
     authorized_key:
        user: reizvih
        state: present
-       key: "{{ lookup('file', '/Users/v.reizvih/.ssh/reizvih/rsa.pub') }}"
+       key: "{{ lookup('file', '/Users/v.reizvih/.ssh/reizvih/id_rsa.pub') }}"
        
   - name: "put troickiy key to server"
     authorized_key:
        user: troickiy
        state: present
-       key: "{{ lookup('file', '/Users/v.reizvih/.ssh/troickiy/rsa.pub') }}"
+       key: "{{ lookup('file', '/Users/v.reizvih/.ssh/troickiy/id_rsa.pub') }}"
