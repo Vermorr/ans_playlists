@@ -127,17 +127,23 @@
 
   - name: "Change SSH port to 2222"
     ansible.builtin.lineinfile:
-      path: /etc/ssh/ssh_config
+      path: /etc/ssh/sshd_config
+      regexp: "^#Port 22"
       line: Port 2222
-      create: yes
 
-  - name: "Disallow SSH password authentication"
-    ansible.builtin.lineinfile:
-      path: /etc/ssh/sshd_config.d/50-cloud-init.conf
-      regexp: "^PasswordAuthentication"
-      line: PasswordAuthentication no
-      owner: root
-      group: root
-      mode: '0644'
+#  - name: "Disallow SSH password authentication"
+#    ansible.builtin.lineinfile:
+#      path: /etc/ssh/sshd_config.d/50-cloud-init.conf
+#      regexp: "^PasswordAuthentication"
+#      line: PasswordAuthentication no
+#      owner: root
+#      group: root
+#      mode: '0644'
+    
+  - name: "restart SSH"
+    ansible.builtin.systemd:
+      state: restarted
+      daemon_reload: true
+      name: sshd
 
     
