@@ -6,6 +6,7 @@
   vars:
     reizvihpass: P@ssword
     troickiypass: P@ssword
+    ivaschenkopass: P@ssword
   
   tasks:
   
@@ -89,6 +90,11 @@
     ansible.builtin.user:
       name: troickiy
       password: "{{ troickiypass | password_hash('sha512') }}"
+
+  - name: "set password ivaschenko"
+    ansible.builtin.user:
+      name: ivaschenko
+      password: "{{ ivaschenkopass | password_hash('sha512') }}"
 
   - name: "install fail2ban"
     ansible.builtin.apt:
