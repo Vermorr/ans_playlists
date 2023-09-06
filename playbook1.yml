@@ -2,7 +2,7 @@
 - name: Post Ubuntu Install
   hosts: all
   become: true
-
+# Playbook для настройки Ubuntu после установки OS
   vars:
     reizvihpass: P@ssword
     troickiypass: P@ssword
