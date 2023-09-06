@@ -114,7 +114,21 @@
       port: 443
       proto: tcp
 
+  - name: "allow ssh port 2222"
+    community.general.ufw:
+      rule: allow
+      direction: in
+      port: 2222
+      proto: tcp
+
   - name: "enable ufw"
     community.general.ufw:
       state: enabled
+
+  - name: "Change SSH port to 2222"
+    ansible.builtin.lineinfile:
+      path: /etc/ssh/ssh_config
+      line: Port 2222
+      create: yes
+
     
