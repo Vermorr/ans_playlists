@@ -24,6 +24,11 @@
 
   - name: "creating users"  
     user: 
+      name: ivaschenko
+      state: present
+
+  - name: "creating users"  
+    user: 
       name: reizvih
       state: present
   
@@ -34,7 +39,15 @@
     loop:
       - reizvih
       - troickiy
+      - ivaschenko
            
+  - name: "add ivaschenko to groups"
+    ansible.builtin.user:
+      name: ivaschenko
+      shell: /bin/bash
+      groups: ivaschenko,sudo
+      append: yes
+
   - name: "add troickiy to groups"
     ansible.builtin.user:
       name: troickiy
@@ -60,6 +73,12 @@
        user: troickiy
        state: present
        key: "{{ lookup('file', '/Users/v.reizvih/.ssh/troickiy/id_rsa.pub') }}"
+
+  - name: "put troickiy key to server"
+    authorized_key:
+       user: ivaschenko
+       state: present
+       key: "{{ lookup('file', '/Users/v.reizvih/.ssh/ivaschenko/id_rsa.pub') }}"
 
   - name: "set password reizvih"
     ansible.builtin.user:
@@ -128,7 +147,7 @@
   - name: "Change SSH port to 2222"
     ansible.builtin.lineinfile:
       path: /etc/ssh/sshd_config
-      regexp: "^Port 22"
+      regexp: "^#Port 22"
       line: Port 2222
 
   - name: "Disallow SSH password authentication"
