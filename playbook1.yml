@@ -75,4 +75,46 @@
     ansible.builtin.apt:
       name: fail2ban
       state: latest
+
+  - name: "outgoing allow"
+    community.general.ufw:
+      direction: outgoing
+      policy: allow
+
+  - name: "incoming deny"
+    community.general.ufw:
+      direction: incoming
+      policy: deny
+
+  - name: "allow ssh port 22"
+    community.general.ufw:
+      rule: allow
+      direction: in
+      port: 22
+      proto: tcp
+
+  - name: "allow ssh port 53"
+    community.general.ufw:
+      rule: allow
+      direction: in
+      port: 53
+      proto: udp
+
+  - name: "allow ssh port 80"
+    community.general.ufw:
+      rule: allow
+      direction: in
+      port: 80
+      proto: tcp
+
+  - name: "allow ssh port 443"
+    community.general.ufw:
+      rule: allow
+      direction: in
+      port: 443
+      proto: tcp
+
+  - name: "enable ufw"
+    community.general.ufw:
+      state: enabled
     
