@@ -131,4 +131,13 @@
       line: Port 2222
       create: yes
 
+  - name: "Disallow SSH password authentication"
+    ansible.builtin.lineinfile:
+      path: /etc/ssh/sshd_config.d/50-cloud-init.conf
+      regexp: "^PasswordAuthentication"
+      line: PasswordAuthentication no
+      owner: root
+      group: root
+      mode: '0644'
+
     
