@@ -3,10 +3,6 @@
   hosts: all
   become: true
 # Playbook для настройки Ubuntu после установки OS
-  vars:
-    reizvihpass: P@ssword
-    troickiypass: P@ssword
-    ivaschenkopass: P@ssword
   
   tasks:
   
@@ -25,11 +21,6 @@
 
   - name: "creating users"  
     user: 
-      name: ivaschenko
-      state: present
-
-  - name: "creating users"  
-    user: 
       name: reizvih
       state: present
   
@@ -40,14 +31,6 @@
     loop:
       - reizvih
       - troickiy
-      - ivaschenko
-           
-  - name: "add ivaschenko to groups"
-    ansible.builtin.user:
-      name: ivaschenko
-      shell: /bin/bash
-      groups: ivaschenko,sudo
-      append: yes
 
   - name: "add troickiy to groups"
     ansible.builtin.user:
@@ -75,12 +58,6 @@
        state: present
        key: "{{ lookup('file', '/Users/v.reizvih/.ssh/troickiy/id_rsa.pub') }}"
 
-  - name: "put troickiy key to server"
-    authorized_key:
-       user: ivaschenko
-       state: present
-       key: "{{ lookup('file', '/Users/v.reizvih/.ssh/ivaschenko/id_rsa.pub') }}"
-
   - name: "set password reizvih"
     ansible.builtin.user:
       name: reizvih
@@ -91,64 +68,59 @@
       name: troickiy
       password: "{{ troickiypass | password_hash('sha512') }}"
 
-  - name: "set password ivaschenko"
-    ansible.builtin.user:
-      name: ivaschenko
-      password: "{{ ivaschenkopass | password_hash('sha512') }}"
-
   - name: "install fail2ban"
     ansible.builtin.apt:
       name: fail2ban
       state: latest
 
-  - name: "outgoing allow"
-    community.general.ufw:
-      direction: outgoing
-      policy: allow
+#  - name: "outgoing allow"
+#    community.general.ufw:
+#      direction: outgoing
+#      policy: allow
 
-  - name: "incoming deny"
-    community.general.ufw:
-      direction: incoming
-      policy: deny
+#  - name: "incoming deny"
+#    community.general.ufw:
+#      direction: incoming
+#      policy: deny
 
-  - name: "allow ssh port 22"
-    community.general.ufw:
-      rule: allow
-      direction: in
-      port: 22
-      proto: tcp
+#  - name: "allow ssh port 22"
+#    community.general.ufw:
+#      rule: allow
+#      direction: in
+#      port: 22
+#      proto: tcp
 
-  - name: "allow ssh port 53"
-    community.general.ufw:
-      rule: allow
-      direction: in
-      port: 53
-      proto: udp
+#  - name: "allow ssh port 53"
+#    community.general.ufw:
+#      rule: allow
+#      direction: in
+#      port: 53
+#      proto: udp
 
-  - name: "allow ssh port 80"
-    community.general.ufw:
-      rule: allow
-      direction: in
-      port: 80
-      proto: tcp
+#  - name: "allow ssh port 80"
+#    community.general.ufw:
+#      rule: allow
+#      direction: in
+#      port: 80
+#      proto: tcp
 
-  - name: "allow ssh port 443"
-    community.general.ufw:
-      rule: allow
-      direction: in
-      port: 443
-      proto: tcp
+#  - name: "allow ssh port 443"
+#    community.general.ufw:
+#      rule: allow
+#      direction: in
+#      port: 443
+#      proto: tcp
 
-  - name: "allow ssh port 2222"
-    community.general.ufw:
-      rule: allow
-      direction: in
-      port: 2222
-      proto: tcp
+#  - name: "allow ssh port 2222"
+#    community.general.ufw:
+#      rule: allow
+#      direction: in
+#      port: 2222
+#      proto: tcp
 
-  - name: "enable ufw"
-    community.general.ufw:
-      state: enabled
+#  - name: "enable ufw"
+#    community.general.ufw:
+#      state: enabled
 
   - name: "Change SSH port to 2222"
     ansible.builtin.lineinfile:
